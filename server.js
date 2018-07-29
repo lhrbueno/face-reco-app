@@ -37,9 +37,23 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/signin', (req, res, next) => {
-  if (req.body.email ===  database.users[0].email &&
+  if (req.body.email === database.users[0].email &&
       req.body.password === database.users[0].password) {
-    res.status(200).json({ message: 'User logged in succesfully' });
+    
+    const user = {
+      id: database.users[0].id,
+      name: database.users[0].name,
+      email: database.users[0].email,
+      entries: database.users[0].entries,
+      joined: database.users[0].joined
+    };
+
+    res.status(200).json({ 
+      status: 200, 
+      message: 'User logged in successfully',
+      user: user
+    });
+
   } else {
     res.status(400).json({ message: 'Login or password is incorrect' });
   }
@@ -59,8 +73,10 @@ app.post('/register', (req, res, next) => {
     };
 
     database.users.push(newUser);
-    console.log(database.users);
-    res.status(200).json({ message: 'User registered sucessfully' });
+    res.status(200).json({ 
+      message: 'User registered sucessfully',
+      user: database.users[database.users.length - 1]
+    });
   } else {
     res.status(500).json({ message: 'An error occurred. Please try again' });
   }
@@ -68,19 +84,9 @@ app.post('/register', (req, res, next) => {
 
 app.get('/profile/:id', (req, res, next) => {
   const { id } = req.params;
-  const userDb = database.users.filter((u) => { 
-    return u.id === Number(id);
-  });
+  const user = req.user;
 
-  if (userDb != null && userDb.length > 0) {
-    const { id, name, email, entries, joined } = userDb[0];
-    const user = {
-      id: id,
-      name: name,
-      email: email,
-      entries: entries,
-      joined: joined
-    };
+  if (user.id === Number(id)) {
     res.status(200).json({ user: user });
   } else {
     res.status(404).json({ message: 'User not found' });
@@ -103,7 +109,7 @@ app.put('/entries', (req, res, next) => {
       entries: entries,
       joined: joined
     };
-
+  
     res.status(200).json({ user: user });
   } else {
     res.status(404).json({ message: 'User not found' });
