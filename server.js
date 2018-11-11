@@ -37,15 +37,21 @@ app.get('/', (req, res, next) => {
 });
 
 app.post('/signin', (req, res, next) => {
-  if (req.body.email === database.users[0].email &&
-      req.body.password === database.users[0].password) {
+
+  const { email, password } = req.body;
+  
+  const userRequest = database.users.filter(user => {
+    return user.email === email && user.password === password;
+  })[0];
+
+  if (userRequest !== undefined) {
     
     const user = {
-      id: database.users[0].id,
-      name: database.users[0].name,
-      email: database.users[0].email,
-      entries: database.users[0].entries,
-      joined: database.users[0].joined
+      id: userRequest.id,
+      name: userRequest.name,
+      email: userRequest.email,
+      entries: userRequest.entries,
+      joined: userRequest.joined
     };
 
     res.status(200).json({ 
@@ -55,7 +61,7 @@ app.post('/signin', (req, res, next) => {
     });
 
   } else {
-    res.status(400).json({ message: 'Login or password is incorrect' });
+    res.status(401).json({ message: 'Login or password is incorrect' });
   }
 });
 
