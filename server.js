@@ -1,9 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const bCrypt = require('bcrypt-nodejs');
 const cors = require('cors');
 const login = require('./src/routes/login');
 const user = require('./src/routes/user');
+
+const mock = require('./src/config/database.mock');
 
 const PORT = process.env.PORT || 3003;
 const app = express();
