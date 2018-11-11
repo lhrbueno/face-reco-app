@@ -45,13 +45,13 @@ app.post('/signin', (req, res, next) => {
   })[0];
 
   if (userRequest !== undefined) {
-    
+    const { id, name, email, entries, joined } = userRequest;
     const user = {
-      id: userRequest.id,
-      name: userRequest.name,
-      email: userRequest.email,
-      entries: userRequest.entries,
-      joined: userRequest.joined
+      id: id,
+      name: name,
+      email: email,
+      entries: entries,
+      joined: joined
     };
 
     res.status(200).json({ 
@@ -101,13 +101,14 @@ app.get('/profile/:id', (req, res, next) => {
 
 app.put('/entries', (req, res, next) => {
   const { id } = req.body;
+
   const userDb = database.users.filter((u) => { 
     return u.id === Number(id);
-  });
+  })[0];
 
-  if (userDb != null && userDb.length > 0) {
-    userDb[0].entries++;
-    const { id, name, email, entries, joined } = userDb[0];
+  if (userDb !== undefined) {
+    userDb.entries++;
+    const { id, name, email, entries, joined } = userDb;
     const user = {
       id: id,
       name: name,
