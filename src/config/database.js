@@ -1,16 +1,13 @@
-const _CLIENT = 'pg';
-const _HOST = '127.0.0.1';
-const _USER = '';
-const _PASSWORD = '';
-const _DATABASE = ''
+const CONN = (process.env.DB_PASSWORD != '') ?
+  `${process.env.DB_VENDOR}://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}` :
+  `${process.env.DB_VENDOR}://${process.env.DB_USER}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DATABASE_NAME}`;
 
 const DATABASE_CONNECTION = {
-  client: _CLIENT,
-  connection: {
-    host: _HOST,
-    user: _USER,
-    password: _PASSWORD,
-    database: _DATABASE
+  client: process.env.DB_CLIENT,
+  connection: CONN,
+  pool: {
+    min: parseInt(process.env.DB_MIN_POOL_CONNECTION),
+    max: parseInt(process.env.DB_MAX_POOL_CONNECTION)
   }
 }
 
