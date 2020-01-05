@@ -6,7 +6,7 @@ const databaseMock = {
       email: 'john@email.com',
       password: 'cookies',
       entries: 0,
-      joined: new Date()
+      joined: new Date().toISOString()
     },
     {
       id: 2,
@@ -14,9 +14,9 @@ const databaseMock = {
       email: 'sally@email.com',
       password: 'cake',
       entries: 0,
-      joined: new Date()
+      joined: new Date().toISOString()
     }
   ]
-}
+};
 
 module.exports = databaseMock;
