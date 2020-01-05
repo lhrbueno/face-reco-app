@@ -1,0 +1,9 @@
+BEGIN TRANSACTION;
+
+CREATE TABLE login(
+    hash VARCHAR(100),
+    email TEXT UNIQUE NOT NULL,
+    FOREIGN KEY(email) REFERENCES users(email)
+);
+
+COMMIT;
