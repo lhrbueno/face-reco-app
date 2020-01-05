@@ -1,31 +1,20 @@
 const router = require('express').Router();
 const mock = require('../config/database.mock');
+const dbConfig = require('../config/database');
+const db = require('knex')(dbConfig);
+const LoginService = require('../services/loginService');
 
-router.post('/signin', (req, res, next) => {
-
+router.post('/signin', (req, res) => {
   const { email, password } = req.body;
-  
-  const userRequest = mock.users.filter(user => {
-    return user.email === email && user.password === password;
-  })[0];
 
-  if (userRequest !== undefined) {
-    const { id, name, email, entries, joined } = userRequest;
-    const user = {
-      id: id,
-      name: name,
-      email: email,
-      entries: entries,
-      joined: joined
-    };
-
-    res.status(200).json({ 
-      status: 200, 
+  try {
+    LoginService.login(db, email, password);
+    res.status(200).json({
+      status: 200,
       message: 'User logged in successfully',
       user: user
     });
-
-  } else {
+  } catch (err) {
     res.status(401).json({ message: 'Login or password is incorrect' });
   }
 });
@@ -44,7 +33,7 @@ router.post('/register', (req, res, next) => {
     };
 
     mock.users.push(newUser);
-    res.status(200).json({ 
+    res.status(200).json({
       message: 'User registered sucessfully',
       user: mock.users[mock.users.length - 1]
     });
