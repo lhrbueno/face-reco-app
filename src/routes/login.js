@@ -1,20 +1,15 @@
 const router = require('express').Router();
 const mock = require('../config/database.mock');
-const dbConfig = require('../config/database');
-const db = require('knex')(dbConfig);
 const LoginService = require('../services/loginService');
+const { RESPONSE, HTTP_STATUS } = require('../utils/response');
 
-router.post('/signin', (req, res) => {
+router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
-
   try {
-    LoginService.login(db, email, password);
-    res.status(200).json({
-      status: 200,
-      message: 'User logged in successfully',
-      user: user
-    });
+    const user = await LoginService.login(email, password);
+    return RESPONSE(res, HTTP_STATUS.OK, user);
   } catch (err) {
+    console.log(err);
     res.status(401).json({ message: 'Login or password is incorrect' });
   }
 });
