@@ -1,30 +1,30 @@
+const dbConfig = require('../config/database');
+const db = require('knex')(dbConfig);
 const PasswordUtils = require('../utils/passwordHandler');
 
-module.exports.login = async (db, email, password) => {
+module.exports.login = async (email, password) => {
   try {
     const [login] = await db
       .select('*')
       .from('login')
-      .where('email', '=', email);
+      .where({ email });
+
+    console.log(login);
 
     const isPasswordValid = await PasswordUtils.comparePassword(
       password,
       login.hash
     );
 
-    if (isPasswordValid) {
-      getUserByEmail(email);
-    } else {
-      return {};
-    }
+    return isPasswordValid ? getUserByEmail(email) : {};
   } catch (err) {
     throw new Error(err);
   }
 };
 
-const getUserByEmail = email => {
+const getUserByEmail = async email => {
   try {
-    const [user] = db
+    const [user] = await db
       .select('*')
       .from('users')
       .where('email', '=', email);
