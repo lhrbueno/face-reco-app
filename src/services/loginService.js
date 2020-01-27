@@ -1,4 +1,4 @@
-const LoginRepository = require('../repositories/lognRepository');
+const LoginRepository = require('../repositories/loginRepository');
 
 module.exports.login = async (email, pwd) => {
   try {
