@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-const SALT_NUMBER = 17;
+const SALT_NUMBER = 13;
 
 module.exports.hashPassword = async password => {
   try {
