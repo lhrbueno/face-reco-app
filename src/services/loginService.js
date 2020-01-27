@@ -1,9 +1,9 @@
 const LoginRepository = require('../repositories/lognRepository');
 
-module.exports.login = (db, email, password) => {
+module.exports.login = async (email, pwd) => {
   try {
-    const user = { ...LoginRepository.login(db, email, password) };
-    delete user.password;
+    const userDB = await LoginRepository.login(email, pwd);
+    const { password, ...user } = userDB;
     return user;
   } catch (err) {
     throw new Error(err);
