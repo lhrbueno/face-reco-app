@@ -1,18 +1,21 @@
 const bcrypt = require('bcryptjs');
-const SALT_NUMBER = 13;
+const { PasswordError } = require('./errorHandler');
+const { CONSTANTS } = require('./messages');
 
-module.exports.hashPassword = async password => {
+module.exports.hashPassword = password => {
   try {
-    const salt = await bcrypt.genSalt(SALT_NUMBER);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const salt = bcrypt.genSaltSync(CONSTANTS.SALT_NUMBER);
+    const hashedPassword = bcrypt.hashSync(password, salt);
     return hashedPassword;
   } catch (err) {
-    throw new Error(err);
+    throw PasswordError(err.message);
   }
 };
 
-module.exports.comparePassword = async (passwordRequest, password) => {
-  const hashedPassword = await this.hashPassword(passwordRequest);
-  console.log('hashedPassword', hashedPassword);
-  return bcrypt.compare(hashedPassword, password);
+module.exports.comparePassword = (passwordRequest, password) => {
+  try {
+    return bcrypt.compareSync(passwordRequest, password);
+  } catch (err) {
+    throw PasswordError(err.message);
+  }
 };
