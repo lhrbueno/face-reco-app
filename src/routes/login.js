@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const mock = require('../config/database.mock');
 const LoginService = require('../services/loginService');
 const { RESPONSE, HTTP_STATUS } = require('../utils/response');
+const { ERROR } = require('../utils/messages');
 
 router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
@@ -10,30 +10,28 @@ router.post('/signin', async (req, res) => {
     return RESPONSE(res, HTTP_STATUS.OK, user);
   } catch (err) {
     console.log(err);
-    res.status(401).json({ message: 'Login or password is incorrect' });
+    return RESPONSE(res, HTTP_STATUS.UNAUTHORIZED, {
+      message: 'Login or password is incorrect'
+    });
   }
 });
 
-router.post('/register', (req, res, next) => {
-  if (req.body) {
+router.post('/register', (req, res) => {
+  try {
     const { name, email, password } = req.body;
-    const userId = mock.users.length + 1;
-    const newUser = {
-      id: userId,
-      name: name,
-      email: email,
-      password: password,
-      entries: 0,
-      joined: new Date()
-    };
 
-    mock.users.push(newUser);
-    res.status(200).json({
-      message: 'User registered sucessfully',
-      user: mock.users[mock.users.length - 1]
+    const newUser = { name, email, password };
+
+    LoginService.register(newUser);
+
+    return RESPONSE(res, HTTP_STATUS.CREATED, {
+      message: 'User registered sucessfully'
     });
-  } else {
-    res.status(500).json({ message: 'An error occurred. Please try again' });
+  } catch (err) {
+    console.log(err);
+    return RESPONSE(res, HTTP_STATUS.INTERNAL_SERVER_ERROR, {
+      message: ERROR.default.message
+    });
   }
 });
 
