@@ -14,7 +14,7 @@ module.exports.updateEntries = async id => {
 
     return user;
   } catch (err) {
-    throw PersistenceError(err.message);
+    throw new PersistenceError(err.message);
   }
 };
 
@@ -27,6 +27,6 @@ module.exports.getProfile = async id => {
 
     return user;
   } catch (err) {
-    throw PersistenceError(err.message);
+    throw new PersistenceError(err.message);
   }
 };

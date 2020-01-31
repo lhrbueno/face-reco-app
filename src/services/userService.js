@@ -6,7 +6,7 @@ module.exports.updateEntries = async id => {
     const user = await UserRepository.updateEntries(id);
     return user;
   } catch (err) {
-    throw RuntimeError(err.type, err.message);
+    throw new RuntimeError(err.type, err.message);
   }
 };
 
@@ -15,6 +15,6 @@ module.exports.getProfile = async id => {
     const user = await UserRepository.getProfile(id);
     return user;
   } catch (err) {
-    throw RuntimeError(err.type, err.message);
+    throw new RuntimeError(err.type, err.message);
   }
 };
