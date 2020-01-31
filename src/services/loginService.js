@@ -7,7 +7,7 @@ module.exports.login = async (email, pwd) => {
     const { password, ...user } = loginDB;
     return user;
   } catch (err) {
-    throw RuntimeError(err.type, err.message);
+    throw new RuntimeError(err.type, err.message);
   }
 };
 
@@ -16,6 +16,6 @@ module.exports.register = async usr => {
     const user = await LoginRepository.register(usr);
     return user;
   } catch (err) {
-    throw RuntimeError(err.type, err.message);
+    throw new RuntimeError(err.type, err.message);
   }
 };
