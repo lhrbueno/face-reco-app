@@ -2,6 +2,7 @@ const router = require('express').Router();
 const UserService = require('../services/userService');
 const { RESPONSE, HTTP_STATUS } = require('../utils/response');
 const { ERROR } = require('../utils/messages');
+const ClarifaiService = require('../services/clarifaiService');
 
 router.get('/profile/:id', async (req, res) => {
   const { id } = req.params;
@@ -23,6 +24,19 @@ router.patch('/entries', async (req, res) => {
     console.log(err);
     return RESPONSE(res, HTTP_STATUS.NOT_FOUND, {
       message: 'User not found'
+    });
+  }
+});
+
+router.post('/image-recognition', async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+    const response = await ClarifaiService.getFaceRecognition(imageUrl);
+    return RESPONSE(res, HTTP_STATUS.OK, response);
+  } catch (err) {
+    console.log(err);
+    return RESPONSE(res, HTTP_STATUS.INTERNAL_SERVER_ERROR, {
+      message: 'DEU RUIM D:'
     });
   }
 });
