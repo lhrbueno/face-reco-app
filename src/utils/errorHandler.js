@@ -1,23 +1,19 @@
 const { ERROR } = require('./messages');
 
 module.exports.PersistenceError = (message = ERROR.PERSISTENCE.message) => {
-  return RuntimeError(ERROR.PERSISTENCE.type, message);
+  return this.RuntimeError(ERROR.PERSISTENCE.type, message);
 };
 
 module.exports.PasswordError = (message = ERROR.PASSWORD.message) => {
-  return RuntimeError(ERROR.PASSWORD.type, message);
+  return this.RuntimeError(ERROR.PASSWORD.type, message);
 };
 
-module.exports.RuntimeError = (
-  type = ERROR.DEFAULT.type,
-  message = ERROR.DEFAULT.message
-) => ({
-  type,
-  message
-});
+class CustomError extends Error {
+  constructor(name = ERROR.DEFAULT.type, message = ERROR.DEFAULT.message) {
+    super(message);
+    this.name = name;
+    this.stack = new Error().stack;
+  }
+}
 
-const RuntimeError = (type, message) => {
-  this.name = type;
-  this.message = message;
-  this.stack = new Error().stack;
-};
+module.exports.RuntimeError = CustomError;
