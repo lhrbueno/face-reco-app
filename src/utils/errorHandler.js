@@ -1,7 +1,7 @@
 const { ERROR } = require('./messages');
 
 module.exports.PersistenceError = (message = ERROR.PERSISTENCE.message) => {
-  return RuntimeError(ERROR.persistence.type, message);
+  return RuntimeError(ERROR.PERSISTENCE.type, message);
 };
 
 module.exports.PasswordError = (message = ERROR.PASSWORD.message) => {
