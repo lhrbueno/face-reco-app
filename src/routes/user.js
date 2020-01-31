@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const UserService = require('../services/userService');
 const { RESPONSE, HTTP_STATUS } = require('../utils/response');
-const { ERROR } = require('../utils/messages');
 const ClarifaiService = require('../services/clarifaiService');
 
 router.get('/profile/:id', async (req, res) => {
