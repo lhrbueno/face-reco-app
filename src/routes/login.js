@@ -19,21 +19,22 @@ router.post('/signin', async (req, res) => {
   }
 });
 
-router.post('/register', (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     const newUser = { name, email, password };
 
-    LoginService.register(newUser);
+    const user = await LoginService.register(newUser);
 
     return RESPONSE(res, HTTP_STATUS.CREATED, {
-      message: 'User registered sucessfully'
+      message: 'User registered sucessfully',
+      user
     });
   } catch (err) {
     console.log(err);
     return RESPONSE(res, HTTP_STATUS.INTERNAL_SERVER_ERROR, {
-      message: ERROR.default.message
+      message: ERROR.DEFAULT.message
     });
   }
 });
