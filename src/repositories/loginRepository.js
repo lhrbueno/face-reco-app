@@ -19,10 +19,10 @@ module.exports.login = async (email, password) => {
     return isPasswordValid ? getUserByEmail(email) : {};
   } catch (err) {
     if (err && err.type) {
-      throw RuntimeError(err.type, err.message);
+      throw new RuntimeError(err.type, err.message);
     }
 
-    throw PersistenceError(err.message);
+    throw new PersistenceError(err.message);
   }
 };
 
@@ -35,7 +35,7 @@ const getUserByEmail = async email => {
 
     return user;
   } catch (err) {
-    throw PersistenceError(err.message);
+    throw new PersistenceError(err.message);
   }
 };
 
@@ -43,7 +43,7 @@ module.exports.register = async user => {
   try {
     const { name, email, password } = user;
 
-    const userDB = await db(CONSTANTS.TABLES.USERS).insert({
+    await db(CONSTANTS.TABLES.USERS).insert({
       name,
       email,
       joined: new Date()
@@ -56,12 +56,13 @@ module.exports.register = async user => {
       hash: hashedPwd
     });
 
-    return userDB;
+    const userByEmail = await getUserByEmail(email);
+    return userByEmail;
   } catch (err) {
     if (err && err.type) {
-      throw RuntimeError(err.type, err.message);
+      throw new RuntimeError(err.type, err.message);
     }
 
-    throw PersistenceError(err.message);
+    throw new PersistenceError(err.message);
   }
 };
