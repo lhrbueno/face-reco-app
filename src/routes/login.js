@@ -7,7 +7,10 @@ router.post('/signin', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await LoginService.login(email, password);
-    return RESPONSE(res, HTTP_STATUS.OK, user);
+
+    return user && user.id
+      ? RESPONSE(res, HTTP_STATUS.OK, { user })
+      : RESPONSE(res, HTTP_STATUS.OK, { message: 'User not found' });
   } catch (err) {
     console.log(err);
     return RESPONSE(res, HTTP_STATUS.UNAUTHORIZED, {
