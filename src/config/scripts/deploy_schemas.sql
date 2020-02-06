@@ -1,4 +1,4 @@
-\i './tables/users.sql'
-\i './tables/login.sql'
+\i './docker-entrypoint-initdb.d/tables/users.sql'
+\i './docker-entrypoint-initdb.d/tables/login.sql'
 
-\i './seed/seed.sql'
+\i './docker-entrypoint-initdb.d/seeds/seed.sql'

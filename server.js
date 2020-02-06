@@ -7,7 +7,7 @@ const morgan = require('morgan');
 
 // Environment variables
 require('dotenv').config({
-  path: path.join(__dirname + '/.env.development.local')
+  path: path.join(__dirname + `/.env.${process.env.NODE_ENV}`)
 });
 
 const PORT = process.env.SERVER_PORT;
@@ -36,6 +36,7 @@ app.get('/', async (req, res) => {
     res.header(HEADERS);
     return RESPONSE(res, HTTP_STATUS.OK, users);
   } catch (err) {
+    console.log(err);
     return RESPONSE(res, HTTP_STATUS.INTERNAL_SERVER_ERROR, {
       status: HTTP_STATUS.INTERNAL_SERVER_ERROR,
       message: 'Error trying to fetch the users from database'
