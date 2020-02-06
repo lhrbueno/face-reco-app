@@ -1,12 +1,26 @@
-version: "3"
+version: '3'
 
 services:
   smart-brain-api:
     container_name: backend
     build: .
-    command: npm start
+    command: npm run start:dev
     working_dir: /usr/src/smart-brain-api
     ports:
-      - "3003:3003"
+      - '${SERVER_PORT}:${SERVER_PORT}'
     volumes:
       - ./:/usr/src/smart-brain-api
+    environment:
+      POSTGRES_URI: ${DB_CLIENT}://${DB_USER}:${DB_PASSWORD}@${DB_VENDOR}:${DB_PORT}/${DB_NAME}
+    links:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    build: ./src/config/scripts
+    ports:
+      - '${DB_PORT}:${DB_PORT}'
+    environment:
+      POSTGRES_HOST: ${DB_VENDOR}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
